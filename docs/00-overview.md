@@ -1,41 +1,131 @@
 # Enterprise Banking Management System
 
-Version: 0.1
+Version: 0.2
 Status: Draft
-Author: Team
-Last Updated: 2026-08-03
 
 ---
 
 # 1. Overview
 
-Enterprise Banking Management System (EBMS) is a centralized banking platform used by banks and financial institutions to manage customers, accounts, deposits, loans, transactions, branches, employees, reports, and daily banking operations.
+Enterprise Banking Management System (EBMS) is a cloud-based Core Banking Platform that enables multiple banks or financial institutions to manage their complete banking operations from a single centralized platform.
 
-The system is designed to be modular, secure, scalable, and easy to maintain.
+The platform follows a **multi-tenant architecture**, where one deployment securely serves multiple banks while keeping each bank's data and configuration logically isolated.
 
 ---
 
 # 2. Vision
 
-Build a modern Core Banking Platform that allows banks to operate digitally while providing an extensible architecture for future products and services.
+Build a modern, enterprise-grade Core Banking Platform that banks can adopt without maintaining their own infrastructure.
+
+The platform should be secure, scalable, configurable, and easy to extend.
 
 ---
 
-# 3. Goals
+# 3. Product Goals
 
-- Modular architecture
-- Secure authentication and authorization
-- Multi-branch support
-- Banking-grade audit logging
+- Multi-tenant architecture
+- Modular design
 - High performance
-- Easy integration with external systems
-- Easy onboarding for new developers
+- High availability
+- Banking-grade security
+- Easy onboarding of new banks
+- Configurable banking products
+- Complete auditability
 
 ---
 
-# 4. Target Users
+# 4. Target Customers
 
-- Super Admin
+The product is intended for financial institutions such as:
+
+- Cooperative Banks
+- Credit Societies
+- Rural Banks
+- Small Finance Banks
+- NBFCs
+- Microfinance Institutions
+
+---
+
+# 5. Platform Ownership
+
+The platform is owned and operated by our company.
+
+Banks subscribe to the platform and use it as a service.
+
+Banks do not receive separate deployments.
+
+All banks use the same platform with complete logical isolation.
+
+---
+
+# 6. Multi-Tenant Architecture
+
+The system is designed as a shared platform.
+
+```
+
+Platform
+        │
+        ├── Tenant A (Bank)
+        │      ├── Branches
+        │      ├── Employees
+        │      ├── Customers
+        │      ├── Accounts
+        │      └── Transactions
+        │
+        ├── Tenant B (Bank)
+        │      ├── Branches
+        │      ├── Employees
+        │      ├── Customers
+        │      ├── Accounts
+        │      └── Transactions
+        │
+        └── Tenant C (Bank)
+
+```
+
+Every business entity belongs to exactly one tenant.
+
+Examples
+
+- Branch
+- Employee
+- Customer
+- Account
+- Loan
+- Transaction
+
+Every request must identify the current tenant.
+
+---
+
+# 7. Tenant Isolation
+
+Each tenant has:
+
+- Users
+- Roles
+- Permissions
+- Branches
+- Employees
+- Customers
+- Banking Products
+- Reports
+- Settings
+
+A tenant cannot access another tenant's data.
+
+---
+
+# 8. User Roles
+
+Platform Roles
+
+- Platform Super Admin
+
+Tenant Roles
+
 - Bank Admin
 - Branch Manager
 - Teller
@@ -48,28 +138,25 @@ Build a modern Core Banking Platform that allows banks to operate digitally whil
 
 ---
 
-# 5. Product Modules
+# 9. Core Modules
 
-## Foundation
+Foundation
 
+- Tenant Management
 - Authentication
 - User Management
 - Roles & Permissions
 - Branch Management
 - Employee Management
 
----
-
-## Customer
+Customer
 
 - Customer Management
 - KYC
 - Nominee
 - Customer Documents
 
----
-
-## Accounts
+Accounts
 
 - Savings Account
 - Current Account
@@ -77,295 +164,70 @@ Build a modern Core Banking Platform that allows banks to operate digitally whil
 - Recurring Deposit
 - Pigmy Account
 
----
-
-## Transactions
+Transactions
 
 - Deposit
 - Withdrawal
 - Transfer
-- Cash Counter
 - Interest Posting
 - Charges
 
----
-
-## Loan
+Loans
 
 - Loan Products
 - Loan Applications
-- Loan Approval
 - EMI
-- Penalty
 - Collection
 
----
-
-## Accounting
+Accounting
 
 - Ledger
 - Cash Book
 - Day Book
-- Journal
 - Balance Sheet
 - Profit & Loss
 
----
+Reports
 
-## Reports
-
-- Customer Reports
-- Account Reports
-- Loan Reports
-- Branch Reports
-- Daily Reports
+- Operational Reports
+- Financial Reports
 - Regulatory Reports
 
----
+System
 
-## System
-
+- Dashboard
 - Notifications
 - Audit Logs
-- Dashboard
 - Settings
 
 ---
 
-# 6. High Level Architecture
+# 10. Development Principles
 
-Frontend
-
-↓
-
-REST API
-
-↓
-
-Business Services
-
-↓
-
-Repository Layer
-
-↓
-
-MongoDB
-
-↓
-
-Redis
-
-↓
-
-External Services
-
----
-
-# 7. Technology Stack
-
-Backend
-- Node.js
-- NestJS
-- TypeScript
-
-Database
-- MongoDB
-
-Cache
-- Redis
-
-Authentication
-- JWT
-
-Storage
-- AWS S3
-
-Documentation
-- Swagger
-
-Deployment
-- Docker
-
----
-
-# 8. Development Principles
-
-- Module based architecture
-- Clean code
-- SOLID principles
+- Multi-tenant by design
+- Secure by default
+- Modular architecture
+- API-first development
 - Repository pattern
-- Service layer
-- DTO validation
-- API versioning
-- Consistent error handling
-- Audit every important action
+- SOLID principles
+- Test-driven mindset
+- Audit every critical operation
+- Backward-compatible APIs where possible
 
 ---
 
-# 9. Documentation Structure
+# 11. Documentation Philosophy
 
-docs/
+Documentation should be concise, practical, and implementation-focused.
 
-01-overview.md
+Each module should answer:
 
-02-authentication.md
+- Why does this module exist?
+- What does it do?
+- Who uses it?
+- What are the business rules?
+- What APIs does it expose?
+- What collections does it use?
+- How is it tested?
 
-03-user-management.md
-
-04-role-permission.md
-
-05-branch-management.md
-
-06-employee-management.md
-
-07-customer-management.md
-
-08-kyc.md
-
-09-account-management.md
-
-10-savings-account.md
-
-11-fixed-deposit.md
-
-12-recurring-deposit.md
-
-13-pigmy-account.md
-
-14-loan-management.md
-
-15-transaction-management.md
-
-16-ledger.md
-
-17-reports.md
-
-18-dashboard.md
-
-19-audit-log.md
-
-20-notifications.md
-
-21-system-settings.md
-
-22-deployment.md
-
----
-
-# 10. Module Documentation Standard
-
-Every module must contain
-
-1. Goal
-2. Features
-3. User Roles
-4. Workflow
-5. Business Rules
-6. Database Collections
-7. Indexes
-8. APIs
-9. Permissions
-10. Validation Rules
-11. Edge Cases
-12. Audit Logs
-13. Testing Checklist
-
----
-
-# 11. Folder Structure
-
-src/
-
-modules/
-
-common/
-
-config/
-
-database/
-
-shared/
-
-scripts/
-
-docs/
-
-tests/
-
----
-
-# 12. Development Workflow
-
-Feature
-
-↓
-
-Design
-
-↓
-
-Database
-
-↓
-
-API
-
-↓
-
-Implementation
-
-↓
-
-Testing
-
-↓
-
-Review
-
-↓
-
-Documentation
-
-↓
-
-Release
-
----
-
-# 13. Coding Standards
-
-- Follow ESLint rules
-- Use Prettier
-- Use meaningful naming
-- Keep controllers thin
-- Business logic only in services
-- Repository handles database
-- No business logic in controllers
-- Every API must have validation
-- Every important operation must create an audit log
-
----
-
-# 14. Versioning
-
-API
-
-/v1
-
-Future
-
-/v2
-
----
-
-# 15. Future Roadmap
-
-- Multi-bank support
-- Multi-tenant architecture
-- Event-driven architecture
-- Microservices
-- Kafka integration
-- Real-time notifications
-- Mobile banking integration
-- AI fraud detection
+Target length: **3–5 pages per module**.

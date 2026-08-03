@@ -1,371 +1,161 @@
-# Enterprise Banking Management System
+# Enterprise Banking Management System (EBMS)
 
-Version: 0.1
-Status: Draft
-Author: Team
-Last Updated: 2026-08-03
+Production-oriented core banking platform monorepo.
 
----
-
-# 1. Overview
-
-Enterprise Banking Management System (EBMS) is a centralized banking platform used by banks and financial institutions to manage customers, accounts, deposits, loans, transactions, branches, employees, reports, and daily banking operations.
-
-The system is designed to be modular, secure, scalable, and easy to maintain.
+**Status:** Phase 0 — Foundation (awaiting approval before Authentication)
 
 ---
 
-# 2. Vision
+## Stack
 
-Build a modern Core Banking Platform that allows banks to operate digitally while providing an extensible architecture for future products and services.
-
----
-
-# 3. Goals
-
-- Modular architecture
-- Secure authentication and authorization
-- Multi-branch support
-- Banking-grade audit logging
-- High performance
-- Easy integration with external systems
-- Easy onboarding for new developers
+| Area     | Technologies                                                                           |
+| -------- | -------------------------------------------------------------------------------------- |
+| Backend  | NestJS · TypeScript · MongoDB (Mongoose) · Redis · Swagger · Jest · Supertest          |
+| Frontend | React · Vite · MUI · React Router · TanStack Query · Axios · RHF · Zod · Redux Toolkit |
+| Tooling  | ESLint · Prettier · Husky · lint-staged · Commitlint · Docker                          |
 
 ---
 
-# 4. Target Users
+## Repository structure
 
-- Super Admin
-- Bank Admin
-- Branch Manager
-- Teller
-- Cashier
-- Loan Officer
-- Accountant
-- Collection Agent
-- Auditor
-- Director
-
----
-
-# 5. Product Modules
-
-## Foundation
-
-- Authentication
-- User Management
-- Roles & Permissions
-- Branch Management
-- Employee Management
+```text
+.
+├── backend/          NestJS Clean Architecture API
+├── frontend/         React SPA
+├── docs/             Design docs & standards
+├── docker/           Dockerfiles & nginx
+├── docker-compose.yml
+└── package.json      npm workspaces root
+```
 
 ---
 
-## Customer
+## Prerequisites
 
-- Customer Management
-- KYC
-- Nominee
-- Customer Documents
-
----
-
-## Accounts
-
-- Savings Account
-- Current Account
-- Fixed Deposit
-- Recurring Deposit
-- Pigmy Account
+- Node.js 20+
+- npm 10+
+- Docker & Docker Compose (for MongoDB/Redis and full stack)
 
 ---
 
-## Transactions
+## Quick start
 
-- Deposit
-- Withdrawal
-- Transfer
-- Cash Counter
-- Interest Posting
-- Charges
+```bash
+# 1) Install dependencies (from repo root)
+npm install
 
----
+# 2) Environment files (never commit real secrets)
+cp backend/.env.example backend/.env
+cp frontend/.env.example frontend/.env
 
-## Loan
+# 3) Infrastructure
+docker compose up -d mongo redis
 
-- Loan Products
-- Loan Applications
-- Loan Approval
-- EMI
-- Penalty
-- Collection
+# 4) Run API + UI
+npm run dev
+```
 
----
-
-## Accounting
-
-- Ledger
-- Cash Book
-- Day Book
-- Journal
-- Balance Sheet
-- Profit & Loss
+| Service  | URL                                 |
+| -------- | ----------------------------------- |
+| Frontend | http://localhost:5173               |
+| API      | http://localhost:3000/api/v1        |
+| Health   | http://localhost:3000/api/v1/health |
+| Swagger  | http://localhost:3000/api/docs      |
 
 ---
 
-## Reports
+## Useful scripts
 
-- Customer Reports
-- Account Reports
-- Loan Reports
-- Branch Reports
-- Daily Reports
-- Regulatory Reports
-
----
-
-## System
-
-- Notifications
-- Audit Logs
-- Dashboard
-- Settings
+| Command                | Description                          |
+| ---------------------- | ------------------------------------ |
+| `npm run dev`          | Backend + frontend in watch mode     |
+| `npm run dev:backend`  | API only                             |
+| `npm run dev:frontend` | UI only                              |
+| `npm run build`        | Build both packages                  |
+| `npm run lint`         | ESLint both packages                 |
+| `npm run format`       | Prettier write                       |
+| `npm test`             | Backend unit tests                   |
+| `npm run test:e2e`     | Backend e2e tests (requires MongoDB) |
+| `npm run docker:up`    | Build & start full compose stack     |
+| `npm run docker:down`  | Stop compose stack                   |
 
 ---
 
-# 6. High Level Architecture
+## Architecture rules
 
-Frontend
+```text
+Controller → Service → Repository → MongoDB
+```
 
-↓
+- Controllers: request validation + service calls only
+- Services: all business logic
+- Repositories: MongoDB access only
+- Feature-based modules under `backend/src/modules/`
 
-REST API
-
-↓
-
-Business Services
-
-↓
-
-Repository Layer
-
-↓
-
-MongoDB
-
-↓
-
-Redis
-
-↓
-
-External Services
+Shared standards: [docs/CODING_STANDARDS.md](docs/CODING_STANDARDS.md)
 
 ---
 
-# 7. Technology Stack
+## Documentation
 
-Backend
-- Node.js
-- NestJS
-- TypeScript
+| Document                                             | Description                 |
+| ---------------------------------------------------- | --------------------------- |
+| [docs/00-overview.md](docs/00-overview.md)           | Product & platform overview |
+| [docs/TEMPLATE.md](docs/TEMPLATE.md)                 | Module design template      |
+| [docs/CODING_STANDARDS.md](docs/CODING_STANDARDS.md) | Engineering standards       |
+| [docs/01-modules.md](docs/01-modules.md)             | Module list                 |
+| [docs/04-roadmap.md](docs/04-roadmap.md)             | Roadmap                     |
 
-Database
-- MongoDB
-
-Cache
-- Redis
-
-Authentication
-- JWT
-
-Storage
-- AWS S3
-
-Documentation
-- Swagger
-
-Deployment
-- Docker
+Every domain module must have a design doc **before** implementation. Work proceeds **module by module** with approval gates.
 
 ---
 
-# 8. Development Principles
+## Git hooks & commits
 
-- Module based architecture
-- Clean code
-- SOLID principles
-- Repository pattern
-- Service layer
-- DTO validation
-- API versioning
-- Consistent error handling
-- Audit every important action
+On `npm install`, Husky installs:
 
----
+- **pre-commit** — lint-staged (Prettier + ESLint)
+- **commit-msg** — Commitlint (conventional commits)
 
-# 9. Documentation Structure
+Example:
 
-docs/
-
-01-overview.md
-
-02-authentication.md
-
-03-user-management.md
-
-04-role-permission.md
-
-05-branch-management.md
-
-06-employee-management.md
-
-07-customer-management.md
-
-08-kyc.md
-
-09-account-management.md
-
-10-savings-account.md
-
-11-fixed-deposit.md
-
-12-recurring-deposit.md
-
-13-pigmy-account.md
-
-14-loan-management.md
-
-15-transaction-management.md
-
-16-ledger.md
-
-17-reports.md
-
-18-dashboard.md
-
-19-audit-log.md
-
-20-notifications.md
-
-21-system-settings.md
-
-22-deployment.md
+```text
+feat(auth): add refresh token rotation
+fix(backend): correct pagination meta
+docs(docs): update overview for foundation
+```
 
 ---
 
-# 10. Module Documentation Standard
+## Docker
 
-Every module must contain
+Full stack:
 
-1. Goal
-2. Features
-3. User Roles
-4. Workflow
-5. Business Rules
-6. Database Collections
-7. Indexes
-8. APIs
-9. Permissions
-10. Validation Rules
-11. Edge Cases
-12. Audit Logs
-13. Testing Checklist
+```bash
+npm run docker:up
+```
 
----
+- UI: http://localhost:8080
+- API: http://localhost:3000
 
-# 11. Folder Structure
+Infrastructure only (local Node processes):
 
-src/
-
-modules/
-
-common/
-
-config/
-
-database/
-
-shared/
-
-scripts/
-
-docs/
-
-tests/
+```bash
+docker compose up -d mongo redis
+```
 
 ---
 
-# 12. Development Workflow
+## What is intentionally not included yet
 
-Feature
+- Authentication / JWT issuance
+- RBAC & permissions enforcement
+- Banking domain modules (customers, accounts, loans, …)
 
-↓
-
-Design
-
-↓
-
-Database
-
-↓
-
-API
-
-↓
-
-Implementation
-
-↓
-
-Testing
-
-↓
-
-Review
-
-↓
-
-Documentation
-
-↓
-
-Release
+Next proposed module after approval: **Authentication**.
 
 ---
 
-# 13. Coding Standards
+## License
 
-- Follow ESLint rules
-- Use Prettier
-- Use meaningful naming
-- Keep controllers thin
-- Business logic only in services
-- Repository handles database
-- No business logic in controllers
-- Every API must have validation
-- Every important operation must create an audit log
-
----
-
-# 14. Versioning
-
-API
-
-/v1
-
-Future
-
-/v2
-
----
-
-# 15. Future Roadmap
-
-- Multi-bank support
-- Multi-tenant architecture
-- Event-driven architecture
-- Microservices
-- Kafka integration
-- Real-time notifications
-- Mobile banking integration
-- AI fraud detection
+UNLICENSED — internal / proprietary use.
